@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nébula</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="star-field"></div>
+    <h1>Nébula</h1>
+    <p>Seu cantinho cósmico e pessoal</p>
+  </header>
+  <nav>
+    <button onclick="showSection('diario')">Diário Cósmico</button>
+    <button onclick="showSection('cartas')">Cartas para o Universo</button>
+    <button onclick="showSection('galeria')">Galeria de Criações</button>
+    <button onclick="showSection('santuario')">Santuário</button>
+    <button onclick="showSection('projetos')">Laboratório de Projetos</button>
+  </nav>
+  <main>
+    <section id="diario" class="active">
+      <h2>Diário Cósmico</h2>
+      <p>Escreva aqui suas reflexões, trechos dos dias, e constelações internas...</p>
+    </section>
+    <section id="cartas">
+      <h2>Cartas para o Universo</h2>
+      <p>Um espaço para escrever cartas simbólicas e deixar o universo responder com silêncio e estrelas.</p>
+    </section>
+    <section id="galeria">
+      <h2>Galeria de Criações</h2>
+      <p>Exponha aqui seus textos, fotos, poemas, pensamentos ou desenhos.</p>
+    </section>
+    <section id="santuario">
+      <h2>Santuário</h2>
+      <p>Seu ninho virtual: orações, playlists, trechos de livros e luzinhas internas.</p>
+    </section>
+    <section id="projetos">
+      <h2>Laboratório de Projetos</h2>
+      <p>Onde você sonha alto, anota ideias e registra tudo que está criando.</p>
+    </section>
+  </main>
+  <script>
+    function showSection(id) {
+      const sections = document.querySelectorAll('section');
+      sections.forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
