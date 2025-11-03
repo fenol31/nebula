@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Revisão Final 🎯</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #8e2de2, #4a00e0);
+      color: #fff;
+      padding: 20px;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background-color: rgba(0,0,0,0.5);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+    h1 { text-align: center; margin-bottom: 20px;}
+    button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+    button:hover { opacity: 0.9; }
+    .feedback {
+      margin-top: 10px;
+      font-weight: bold;
+      min-height: 24px;
+    }
+    .score {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 18px;
+    }
+    .finalMessage {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    input {
+      width: 48%;
+      padding: 8px;
+      margin: 5px 1%;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Revisão Final 🎯</h1>
+    <p>Teste tudo o que aprendeu! Cada resposta correta vale 10 pontos.</p>
+
+    <h3>1. Ácidos: Qual ácido está presente no limão?</h3>
+    <button onclick="checkAnswer(1,'a')">Ácido acético</button>
+    <button onclick="checkAnswer(1,'b')">Ácido cítrico</button>
+    <button onclick="checkAnswer(1,'c')">Ácido carbônico</button>
+    <div class="feedback" id="feedback1"></div>
+
+    <h3>2. Bases: Qual é a função do leite de magnésia?</h3>
+    <button onclick="checkAnswer(2,'a')">É ácido e aumenta a acidez</button>
+    <button onclick="checkAnswer(2,'b')">É base e neutraliza o ácido</button>
+    <button onclick="checkAnswer(2,'c')">Faz cócegas no estômago</button>
+    <div class="feedback" id="feedback2"></div>
+
+    <h3>3. Sais: Qual sal é usado para aliviar azia?</h3>
+    <button onclick="checkAnswer(3,'a')">Cloreto de sódio</button>
+    <button onclick="checkAnswer(3,'b')">Bicarbonato de sódio</button>
+    <button onclick="checkAnswer(3,'c')">Carbonato de cálcio</button>
+    <div class="feedback" id="feedback3"></div>
+
+    <h3>4. Óxidos: O CO₂ é classificado como:</h3>
+    <button onclick="checkAnswer(4,'a')">Óxido básico</button>
+    <button onclick="checkAnswer(4,'b')">Óxido ácido</button>
+    <button onclick="checkAnswer(4,'c')">Óxido neutro</button>
+    <div class="feedback" id="feedback4"></div>
+
+    <div class="score" id="score">Pontuação: 0</div>
+    <div class="finalMessage" id="finalMessage"></div>
+
+    <hr>
+    <p>Digite seu nome e turma para registrar a pontuação:</p>
+    <input type="text" id="nome" placeholder="Seu nome">
+    <input type="text" id="turma" placeholder="Sua turma">
+    <button onclick="enviarPontuacao()">Enviar pontuação</button>
+    <div id="resultadoEnvio" style="margin-top:10px;"></div>
+  </div>
+
+  <script>
+    let score = 0;
+    const answered = [false, false, false, false];
+
+    function checkAnswer(question, answer) {
+      let feedback = document.getElementById('feedback'+question);
+      const correctAnswers = ['b','b','b','b'];
+
+      if(answered[question-1]) return;
+      answered[question-1] = true;
+
+      if(answer === correctAnswers[question-1]) {
+        feedback.textContent = "✅ Correto!";
+        score += 10;
+      } else {
+        feedback.textContent = "❌ Ops! Tente de novo mais tarde!";
+      }
+
+      document.getElementById('score').textContent = "Pontuação: " + score;
+
+      if(answered.every(a => a)) {
+        const final = document.getElementById('finalMessage');
+        final.style.display = "block";
+        if(score === 40) {
+          final.textContent = "🏆 Parabéns! Você é um Mestre Químico! 🌌🧪";
+        } else if(score >= 20) {
+          final.textContent = "✨ Muito bem! Continue praticando para virar um Mestre Químico!";
+        } else {
+          final.textContent = "😅 Boa tentativa! Revise as lições e tente novamente!";
+        }
+      }
+    }
+
+    function enviarPontuacao() {
+      const nome = document.getElementById('nome').value;
+      const turma = document.getElementById('turma').value;
+      if(!nome || !turma) {
+        document.getElementById('resultadoEnvio').textContent = "⚠️ Preencha nome e turma!";
+        return;
+      }
+
+      const data = { nome: nome, turma: turma, pontuacao: score };
+
+      fetch("https://script.google.com/macros/s/AKfycbx3BvSrVn6HZbwLkaZeZHTeiutgsfjwt5zSR5BGmms8dQUEZxKKEp9S9PPaCKYfLCYS/exec", {
+        method: "POST",
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(res => {
+        if(res.status === "success"){
+          document.getElementById('resultadoEnvio').textContent = "✅ Pontuação registrada com sucesso!";
+        } else {
+          document.getElementById('resultadoEnvio').textContent = "❌ Ocorreu um erro ao registrar.";
+        }
+      })
+      .catch(err => {
+        document.getElementById('resultadoEnvio').textContent = "❌ Ocorreu um erro ao registrar.";
+        console.error(err);
+      });
+    }
+  </script>
+</body>
+</html>
