@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Lição Interativa - Ácidos</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #ff9966, #ff5e62);
+      color: #fff;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: rgba(0,0,0,0.4);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+    h1 { text-align: center; }
+    button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+    button:hover { opacity: 0.9; }
+    .feedback {
+      margin-top: 15px;
+      font-weight: bold;
+      min-height: 24px;
+    }
+    .score {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+    }
+    .next {
+      display: none;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .next a {
+      padding: 10px 20px;
+      background: #ffd700;
+      color: #000;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+    .next a:hover {
+      background: #ffc107;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ácidos 🍋</h1>
+    <p>
+      Os ácidos liberam íons H⁺ em água. Estão em limão, vinagre, refrigerante e até no suco gástrico.
+    </p>
+
+    <h3>1. Qual ácido está presente no refrigerante?</h3>
+    <button onclick="checkAnswer(1,'a')">Ácido acético</button>
+    <button onclick="checkAnswer(1,'b')">Ácido sulfúrico</button>
+    <button onclick="checkAnswer(1,'c')">Ácido carbônico</button>
+    <button onclick="checkAnswer(1,'d')">Ácido cítrico</button>
+    <div class="feedback" id="feedback1"></div>
+
+    <h3>2. O vinagre da salada contém ácido acético. O que todos os ácidos têm em comum?</h3>
+    <button onclick="checkAnswer(2,'a')">São doces</button>
+    <button onclick="checkAnswer(2,'b')">Liberam íons H⁺ na água</button>
+    <button onclick="checkAnswer(2,'c')">Reagem com bases e formam água</button>
+    <button onclick="checkAnswer(2,'d')">São sempre perigosos</button>
+    <div class="feedback" id="feedback2"></div>
+
+    <h3>3. O suco gástrico do estômago contém ácido clorídrico (HCl). Por que ele é importante?</h3>
+    <button onclick="checkAnswer(3,'a')">Serve pra deixar o estômago bonito</button>
+    <button onclick="checkAnswer(3,'b')">Ajuda a digerir alimentos e matar bactérias</button>
+    <button onclick="checkAnswer(3,'c')">Faz parte do sistema nervoso</button>
+    <button onclick="checkAnswer(3,'d')">É só uma curiosidade química</button>
+    <div class="feedback" id="feedback3"></div>
+
+    <div class="score" id="score">Pontuação: 0</div>
+
+    <div class="next" id="next">
+      <a href="bases.html">Próxima lição: Bases 🧼</a>
+    </div>
+  </div>
+
+  <script>
+    let score = 0;
+    const answered = [false, false, false];
+
+    function checkAnswer(question, answer) {
+      let feedback = document.getElementById('feedback'+question);
+      let correctAnswers = ['c','b','b']; // respostas corretas das 3 perguntas
+
+      if(answered[question-1]) return; // evita múltiplos cliques
+      answered[question-1] = true;
+
+      if(answer === correctAnswers[question-1]) {
+        feedback.textContent = "✅ Correto!";
+        score += 10;
+      } else {
+        feedback.textContent = "❌ Ops! Tente de novo mais tarde!";
+      }
+
+      document.getElementById('score').textContent = "Pontuação: " + score;
+
+      // mostra botão de próxima lição quando todas respondidas
+      if(answered.every(a => a)) {
+        document.getElementById('next').style.display = "block";
+      }
+    }
+  </script>
+</body>
+</html>
