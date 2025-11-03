@@ -119,6 +119,38 @@
         document.getElementById('next').style.display = "block";
       }
     }
+    <!-- Formulário para enviar nome e turma -->
+<p>Digite seu nome e turma para registrar a pontuação:</p>
+<input type="text" id="nome" placeholder="Seu nome">
+<input type="text" id="turma" placeholder="Sua turma">
+<button onclick="enviarPontuacao()">Enviar pontuação</button>
+
+<div id="resultadoEnvio" style="margin-top:10px;"></div>
+
+<script>
+function enviarPontuacao() {
+  const nome = document.getElementById('nome').value;
+  const turma = document.getElementById('turma').value;
+  const data = { nome: nome, turma: turma, pontuacao: score };
+
+  fetch("https://script.google.com/macros/s/AKfycbx3BvSrVn6HZbwLkaZeZHTeiutgsfjwt5zSR5BGmms8dQUEZxKKEp9S9PPaCKYfLCYS/exec", {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(res => {
+    if(res.status === "success"){
+      document.getElementById('resultadoEnvio').textContent = "✅ Pontuação registrada com sucesso!";
+    } else {
+      document.getElementById('resultadoEnvio').textContent = "❌ Ocorreu um erro ao registrar.";
+    }
+  })
+  .catch(err => {
+    document.getElementById('resultadoEnvio').textContent = "❌ Ocorreu um erro ao registrar.";
+    console.error(err);
+  });
+}
+
   </script>
 </body>
 </html>
