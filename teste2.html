@@ -113,16 +113,10 @@
             transform: translateY(-2px);
         }
         
-        .option.correct {
-            background-color: #c8e6c9;
-            border-color: #00c853;
-            color: #2e7d32;
-        }
-        
-        .option.incorrect {
-            background-color: #ffcdd2;
-            border-color: #f44336;
-            color: #c62828;
+        .option.selected {
+            background-color: #4a00e0;
+            border-color: #4a00e0;
+            color: white;
         }
         
         .feedback {
@@ -131,20 +125,20 @@
             margin: 20px 0;
             text-align: center;
             font-weight: bold;
-            opacity: 0;
-            transition: opacity 0.5s ease;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .feedback.correct {
             background-color: #e8f5e9;
             color: #2e7d32;
-            opacity: 1;
         }
         
         .feedback.incorrect {
             background-color: #ffebee;
             color: #c62828;
-            opacity: 1;
         }
         
         .navigation {
@@ -236,7 +230,7 @@
             background-color: #3800b0;
         }
         
-        .lesson-counter {
+        .question-counter {
             text-align: center;
             margin-top: 10px;
             color: #666;
@@ -300,37 +294,39 @@
             <div class="progress-bar" id="progressBar"></div>
         </div>
         
-        <div class="lesson-counter" id="lessonCounter">Lição 1 de 5</div>
+        <div class="question-counter" id="questionCounter">Questão 1 de 10</div>
         
-        <!-- Tela da lição -->
-        <div id="lessonScreen" class="lesson-content">
-            <h2 class="lesson-title" id="lessonTitle">Ácidos - Os Azedinhos da Química</h2>
+        <!-- Tela da questão -->
+        <div id="questionScreen" class="lesson-content">
+            <h2 class="lesson-title" id="lessonTitle">Funções Inorgânicas</h2>
             
             <div class="explanation" id="explanation">
-                Os ácidos são substâncias que, em solução aquosa, liberam íons H⁺. Eles são os "azedinhos" da química! Presentes no limão (ácido cítrico), no vinagre (ácido acético) e até no nosso suco gástrico (ácido clorídrico). Cuidado: alguns são mansinhos, outros são verdadeiros "dragões" corrosivos!
+                Vamos aprender sobre as quatro funções inorgânicas da química: ácidos, bases, sais e óxidos. Cada uma tem características específicas e estão presentes no nosso dia a dia!
             </div>
             
             <div class="question-container">
-                <div class="question-text" id="questionText">Qual das alternativas abaixo é um exemplo de ácido?</div>
+                <div class="question-text" id="questionText"></div>
                 
                 <div class="options" id="optionsContainer">
                     <!-- As opções serão geradas dinamicamente pelo JavaScript -->
                 </div>
             </div>
             
-            <div class="feedback" id="feedback"></div>
+            <div class="feedback" id="feedback">
+                Selecione uma opção para ver o feedback
+            </div>
             
             <div class="navigation">
-                <button class="btn-restart" id="restartBtn">Reiniciar Lição</button>
+                <button class="btn-restart" id="restartBtn">Reiniciar Atividade</button>
                 <button class="btn-next" id="nextBtn" disabled>Próxima →</button>
             </div>
         </div>
         
         <!-- Tela de registro -->
         <div id="registrationScreen" class="registration-form">
-            <h2 class="form-title">Parabéns! Você completou todas as lições!</h2>
+            <h2 class="form-title">Parabéns! Você completou todas as questões!</h2>
             <div class="explanation">
-                Agora, por favor, informe seus dados para que seu professor possa acompanhar seu progresso. Sua pontuação será enviada automaticamente.
+                Agora, por favor, informe seus dados para que seu professor possa acompanhar seu progresso. Sua pontuação será enviada automaticamente (você não verá sua nota).
             </div>
             
             <form id="registrationForm">
@@ -360,131 +356,89 @@
     </div>
 
     <script>
-        // Configuração da atividade
-        const lessons = [
+        // Banco de questões - 10 questões no total
+        const questions = [
             {
-                title: "Ácidos - Os Azedinhos da Química",
-                explanation: "Os ácidos são substâncias que, em solução aquosa, liberam íons H⁺. Eles são os 'azedinhos' da química! Presentes no limão (ácido cítrico), no vinagre (ácido acético) e até no nosso sugo gástrico (ácido clorídrico). Cuidado: alguns são mansinhos, outros são verdadeiros 'dragões' corrosivos!",
-                questions: [
-                    {
-                        question: "Qual das alternativas abaixo é um exemplo de ácido?",
-                        options: ["NaOH", "HCl", "NaCl", "CO₂"],
-                        correctAnswer: 1
-                    },
-                    {
-                        question: "Qual é a principal característica dos ácidos em solução aquosa?",
-                        options: ["Liberam íons OH⁻", "Liberam íons H⁺", "Não conduzem eletricidade", "Têm sabor adocicado"],
-                        correctAnswer: 1
-                    },
-                    {
-                        question: "Qual desses ácidos é encontrado no limão?",
-                        options: ["Ácido sulfúrico", "Ácido acético", "Ácido cítrico", "Ácido clorídrico"],
-                        correctAnswer: 2
-                    }
-                ]
+                category: "Ácidos",
+                question: "Qual das alternativas abaixo é um exemplo de ácido?",
+                options: ["NaOH", "HCl", "NaCl", "CO₂"],
+                correctAnswer: 1,
+                explanation: "Os ácidos são substâncias que liberam íons H⁺ em solução aquosa. HCl (ácido clorídrico) é um exemplo comum."
             },
             {
-                title: "Bases - Os Amargos que Neutralizam",
-                explanation: "As bases (ou hidróxidos) são substâncias que em solução aquosa liberam íons OH⁻. São os 'amargos' da química, com sensação escorregadia ao toque. Presentes no sabão, no leite de magnésia e na soda cáustica. Sua missão? Neutralizar os ácidos! É a famosa reação de neutralização.",
-                questions: [
-                    {
-                        question: "Qual das alternativas abaixo é um exemplo de base?",
-                        options: ["H₂SO₄", "NaOH", "NaCl", "H₂O"],
-                        correctAnswer: 1
-                    },
-                    {
-                        question: "Qual é a principal característica das bases em solução aquosa?",
-                        options: ["Liberam íons H⁺", "Liberam íons OH⁻", "Têm sabor azedo", "São sempre líquidas"],
-                        correctAnswer: 1
-                    },
-                    {
-                        question: "O que acontece quando misturamos uma base com um ácido?",
-                        options: ["Forma-se um sal e água", "Forma-se um gás tóxico", "Não acontece nada", "A solução fica ácida"],
-                        correctAnswer: 0
-                    }
-                ]
+                category: "Ácidos",
+                question: "Qual é a principal característica dos ácidos em solução aquosa?",
+                options: ["Liberam íons OH⁻", "Liberam íons H⁺", "Não conduzem eletricidade", "Têm sabor adocicado"],
+                correctAnswer: 1,
+                explanation: "A definição de Arrhenius diz que ácidos são substâncias que em solução aquosa liberam íons H⁺."
             },
             {
-                title: "Sais - Os Resultados da Neutralização",
-                explanation: "Os sais são compostos iônicos resultantes da reação entre um ácido e uma base. Eles são os 'filhotes' da química! O sal de cozinha (NaCl) é o mais famoso, mas existem milhares: carbonato de cálcio (mármore), nitrato de potássio (fertilizante) e muitos outros. Alguns são saborosos, outros... nem tanto!",
-                questions: [
-                    {
-                        question: "Qual das alternativas abaixo é um exemplo de sal?",
-                        options: ["HCl", "NaOH", "NaCl", "CO₂"],
-                        correctAnswer: 2
-                    },
-                    {
-                        question: "Como os sais são formados?",
-                        options: ["Pela reação de um ácido com uma base", "Pela reação de dois metais", "Pela decomposição da água", "Pela combustão do oxigênio"],
-                        correctAnswer: 0
-                    },
-                    {
-                        question: "Qual é o sal mais consumido no mundo?",
-                        options: ["Carbonato de cálcio", "Nitrato de potássio", "Cloreto de sódio", "Sulfato de cobre"],
-                        correctAnswer: 2
-                    }
-                ]
+                category: "Bases",
+                question: "Qual das alternativas abaixo é um exemplo de base?",
+                options: ["H₂SO₄", "NaOH", "NaCl", "H₂O"],
+                correctAnswer: 1,
+                explanation: "NaOH (hidróxido de sódio) é uma base forte, também conhecida como soda cáustica."
             },
             {
-                title: "Óxidos - Os Compostos com Oxigênio",
-                explanation: "Óxidos são compostos binários formados por oxigênio e outro elemento. Eles são os 'onipresentes' da química! A ferrugem (óxido de ferro), o gás carbônico (óxido de carbono) e a cal (óxido de cálcio) são exemplos. Alguns são essenciais para a vida, outros... melhor manter distância!",
-                questions: [
-                    {
-                        question: "Qual das alternativas abaixo é um exemplo de óxido?",
-                        options: ["NaOH", "HCl", "CO₂", "NaCl"],
-                        correctAnswer: 2
-                    },
-                    {
-                        question: "Óxidos são compostos formados por oxigênio e:",
-                        options: ["Apenas metais", "Apenas não-metais", "Qualquer outro elemento", "Apenas hidrogênio"],
-                        correctAnswer: 2
-                    },
-                    {
-                        question: "Qual óxido é responsável pela ferrugem?",
-                        options: ["Óxido de cálcio", "Óxido de alumínio", "Óxido de ferro", "Óxido de sódio"],
-                        correctAnswer: 2
-                    }
-                ]
+                category: "Bases",
+                question: "Qual é a principal característica das bases em solução aquosa?",
+                options: ["Liberam íons H⁺", "Liberam íons OH⁻", "Têm sabor azedo", "São sempre líquidas"],
+                correctAnswer: 1,
+                explanation: "Segundo Arrhenius, bases são substâncias que em solução aquosa liberam íons OH⁻."
             },
             {
-                title: "Revisão Final - Misturando Tudo!",
-                explanation: "Hora de testar seus conhecimentos sobre todas as funções inorgânicas! Ácidos, bases, sais e óxidos - cada um com suas características e funções. Lembre-se: ácidos liberam H⁺, bases liberam OH⁻, sais são resultados da neutralização, e óxidos têm oxigênio + outro elemento. Boa sorte!",
-                questions: [
-                    {
-                        question: "Qual função inorgânica libera íons H⁺ em solução aquosa?",
-                        options: ["Ácidos", "Bases", "Sais", "Óxidos"],
-                        correctAnswer: 0
-                    },
-                    {
-                        question: "NaOH é um exemplo de:",
-                        options: ["Ácido", "Base", "Sal", "Óxido"],
-                        correctAnswer: 1
-                    },
-                    {
-                        question: "O resultado da reação entre um ácido e uma base é:",
-                        options: ["Um óxido", "Um sal e água", "Apenas água", "Um gás"],
-                        correctAnswer: 1
-                    },
-                    {
-                        question: "CO₂ é um exemplo de:",
-                        options: ["Ácido", "Base", "Sal", "Óxido"],
-                        correctAnswer: 3
-                    }
-                ]
+                category: "Sais",
+                question: "Qual das alternativas abaixo é um exemplo de sal?",
+                options: ["HCl", "NaOH", "NaCl", "CO₂"],
+                correctAnswer: 2,
+                explanation: "NaCl (cloreto de sódio) é o sal de cozinha, o sal mais consumido no mundo."
+            },
+            {
+                category: "Sais",
+                question: "Como os sais são formados?",
+                options: ["Pela reação de um ácido com uma base", "Pela reação de dois metais", "Pela decomposição da água", "Pela combustão do oxigênio"],
+                correctAnswer: 0,
+                explanation: "Os sais são formados pela reação de neutralização entre um ácido e uma base, produzindo sal e água."
+            },
+            {
+                category: "Óxidos",
+                question: "Qual das alternativas abaixo é um exemplo de óxido?",
+                options: ["NaOH", "HCl", "CO₂", "NaCl"],
+                correctAnswer: 2,
+                explanation: "CO₂ (dióxido de carbono) é um óxido ácido, também conhecido como gás carbônico."
+            },
+            {
+                category: "Óxidos",
+                question: "Óxidos são compostos formados por oxigênio e:",
+                options: ["Apenas metais", "Apenas não-metais", "Qualquer outro elemento", "Apenas hidrogênio"],
+                correctAnswer: 2,
+                explanation: "Óxidos são compostos binários formados por oxigênio e qualquer outro elemento químico."
+            },
+            {
+                category: "Revisão",
+                question: "Qual função inorgânica libera íons H⁺ em solução aquosa?",
+                options: ["Ácidos", "Bases", "Sais", "Óxidos"],
+                correctAnswer: 0,
+                explanation: "Os ácidos são caracterizados por liberarem íons H⁺ (prótons) quando dissolvidos em água."
+            },
+            {
+                category: "Revisão",
+                question: "O resultado da reação entre um ácido e uma base é:",
+                options: ["Um óxido", "Um sal e água", "Apenas água", "Um gás"],
+                correctAnswer: 1,
+                explanation: "A reação entre ácido e base é chamada de neutralização e produz sal e água."
             }
         ];
 
         // Variáveis de estado
-        let currentLesson = 0;
-        let currentQuestion = 0;
+        let currentQuestionIndex = 0;
         let score = 0;
-        let totalQuestions = 0;
-        let answeredQuestions = 0;
+        const totalQuestions = 10;
         let selectedOption = null;
         let canAnswer = true;
 
         // Elementos DOM
-        const lessonScreen = document.getElementById('lessonScreen');
+        const questionScreen = document.getElementById('questionScreen');
         const registrationScreen = document.getElementById('registrationScreen');
         const completionScreen = document.getElementById('completionScreen');
         const lessonTitle = document.getElementById('lessonTitle');
@@ -495,41 +449,39 @@
         const nextBtn = document.getElementById('nextBtn');
         const restartBtn = document.getElementById('restartBtn');
         const progressBar = document.getElementById('progressBar');
-        const lessonCounter = document.getElementById('lessonCounter');
+        const questionCounter = document.getElementById('questionCounter');
         const registrationForm = document.getElementById('registrationForm');
         const finalRestartBtn = document.getElementById('finalRestartBtn');
 
         // Inicializar a atividade
         function initActivity() {
-            // Calcular total de questões
-            totalQuestions = lessons.reduce((total, lesson) => total + lesson.questions.length, 0);
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedOption = null;
+            canAnswer = true;
             
-            // Iniciar a primeira lição
-            loadLesson(currentLesson);
-        }
-
-        // Carregar uma lição
-        function loadLesson(lessonIndex) {
-            const lesson = lessons[lessonIndex];
-            lessonTitle.textContent = lesson.title;
-            explanation.textContent = lesson.explanation;
-            currentQuestion = 0;
+            questionScreen.style.display = 'block';
+            registrationScreen.style.display = 'none';
+            completionScreen.style.display = 'none';
             
-            // Atualizar contador
-            lessonCounter.textContent = `Lição ${lessonIndex + 1} de ${lessons.length}`;
-            
-            // Atualizar barra de progresso
-            const progress = (lessonIndex / lessons.length) * 100;
-            progressBar.style.width = `${progress}%`;
-            
-            // Carregar a primeira questão da lição
-            loadQuestion(lessonIndex, currentQuestion);
+            loadQuestion(currentQuestionIndex);
         }
 
         // Carregar uma questão
-        function loadQuestion(lessonIndex, questionIndex) {
-            const question = lessons[lessonIndex].questions[questionIndex];
+        function loadQuestion(questionIndex) {
+            const question = questions[questionIndex];
+            
+            // Atualizar título e explicação baseado na categoria
+            lessonTitle.textContent = question.category;
+            explanation.textContent = getCategoryExplanation(question.category);
             questionText.textContent = question.question;
+            
+            // Atualizar contador
+            questionCounter.textContent = `Questão ${questionIndex + 1} de ${totalQuestions}`;
+            
+            // Atualizar barra de progresso
+            const progress = ((questionIndex) / totalQuestions) * 100;
+            progressBar.style.width = `${progress}%`;
             
             // Limpar opções anteriores
             optionsContainer.innerHTML = '';
@@ -547,11 +499,23 @@
             });
             
             // Resetar estado
-            feedback.textContent = '';
+            feedback.textContent = "Selecione uma opção para ver o feedback";
             feedback.className = 'feedback';
             nextBtn.disabled = true;
             selectedOption = null;
             canAnswer = true;
+        }
+
+        // Obter explicação da categoria
+        function getCategoryExplanation(category) {
+            const explanations = {
+                "Ácidos": "Os ácidos são os 'azedinhos' da química! Liberam íons H⁺ em solução aquosa. Exemplos: limão (ácido cítrico), vinagre (ácido acético).",
+                "Bases": "As bases são os 'amargos' da química! Liberam íons OH⁻ em solução aquosa. Exemplos: sabão, leite de magnésia.",
+                "Sais": "Os sais são os resultados da neutralização! Formados pela reação entre ácido e base. Exemplo: sal de cozinha (NaCl).",
+                "Óxidos": "Os óxidos têm oxigênio + outro elemento! Podem ser ácidos, básicos ou neutros. Exemplos: ferrugem, gás carbônico.",
+                "Revisão": "Hora de revisar tudo! Ácidos, bases, sais e óxidos - cada um com suas características específicas."
+            };
+            return explanations[category] || "Vamos testar seus conhecimentos sobre funções inorgânicas!";
         }
 
         // Selecionar uma opção
@@ -561,52 +525,43 @@
             canAnswer = false;
             selectedOption = selectedIndex;
             
-            // Marcar todas as opções como selecionadas
+            // Remover seleção anterior
             const allOptions = document.querySelectorAll('.option');
             allOptions.forEach(option => {
-                option.classList.remove('correct', 'incorrect');
+                option.classList.remove('selected');
             });
+            
+            // Marcar opção selecionada
+            optionElement.classList.add('selected');
             
             // Verificar resposta
             if (selectedIndex === correctIndex) {
-                optionElement.classList.add('correct');
-                feedback.textContent = "✅ Acertou! Muito bem!";
+                feedback.textContent = "✅ Acertou!";
                 feedback.className = 'feedback correct';
-                score++; // Incrementar pontuação
+                score++; // Incrementar pontuação (1 ponto por questão)
             } else {
-                optionElement.classList.add('incorrect');
-                feedback.textContent = "❌ Tente novamente!";
+                feedback.textContent = "❌ Tente novamente na próxima questão!";
                 feedback.className = 'feedback incorrect';
-                
-                // Mostrar a resposta correta
-                allOptions[correctIndex].classList.add('correct');
             }
             
-            answeredQuestions++;
             nextBtn.disabled = false;
         }
 
-        // Avançar para a próxima questão ou lição
-        function nextStep() {
-            const currentLessonObj = lessons[currentLesson];
+        // Avançar para a próxima questão
+        function nextQuestion() {
+            currentQuestionIndex++;
             
-            if (currentQuestion < currentLessonObj.questions.length - 1) {
-                // Próxima questão na mesma lição
-                currentQuestion++;
-                loadQuestion(currentLesson, currentQuestion);
-            } else if (currentLesson < lessons.length - 1) {
-                // Próxima lição
-                currentLesson++;
-                loadLesson(currentLesson);
+            if (currentQuestionIndex < totalQuestions) {
+                loadQuestion(currentQuestionIndex);
             } else {
-                // Última lição concluída - mostrar tela de registro
+                // Todas as questões respondidas - mostrar tela de registro
                 showRegistrationScreen();
             }
         }
 
         // Mostrar tela de registro
         function showRegistrationScreen() {
-            lessonScreen.style.display = 'none';
+            questionScreen.style.display = 'none';
             registrationScreen.style.display = 'block';
             
             // Atualizar barra de progresso para 100%
@@ -619,57 +574,40 @@
             completionScreen.style.display = 'block';
         }
 
-        // Reiniciar atividade
-        function restartActivity() {
-            currentLesson = 0;
-            currentQuestion = 0;
-            score = 0;
-            answeredQuestions = 0;
-            
-            lessonScreen.style.display = 'block';
-            registrationScreen.style.display = 'none';
-            completionScreen.style.display = 'none';
-            
-            initActivity();
-        }
+ 
+   // URL do Apps Script publicado como Web App
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxE0-E2qrcVbpLcMkbWjwn22-U5yCJWlsEjfEk8EfGrGeNrmCsKJyX9umYhY_5Ejo5/exec";
 
-        // Enviar dados para o Google Sheets (simulação)
-        function https://script.google.com/macros/s/AKfycbw09iSpZFbNbqo5U0DRFuZaB5pnTRuO2fd1EFyiXW_rfChm0AfYFlNXwIUZExeKs2IB/exec (studentName, studentClass) {
-            // Em um ambiente real, aqui seria feita uma requisição para o Google Apps Script
-            // que enviaria os dados para a planilha do Google Sheets
-            
-            // Simulação do envio
-            console.log(`Dados enviados para o Google Sheets:
-            Nome: ${studentName}
-            Turma: ${studentClass}
-            Pontuação: ${score}/${totalQuestions}
-            Percentual: ${((score / totalQuestions) * 100).toFixed(1)}%`);
-            
-            // Em uma implementação real, você usaria:
-            // fetch('URL_DO_SEU_GOOGLE_APPS_SCRIPT', {
-            //     method: 'POST',
-            //     body: JSON.stringify({
-            //         name: studentName,
-            //         class: studentClass,
-            //         score: score,
-            //         total: totalQuestions,
-            //         timestamp: new Date().toISOString()
-            //     })
-            // });
-            
-            // Para testar, mostramos um alerta
-            alert(`Dados enviados com sucesso!\n\nNome: ${studentName}\nTurma: ${studentClass}\n\nSua pontuação (${score}/${totalQuestions}) foi registrada e enviada ao professor.`);
-            
-            // Mostrar tela de conclusão após 1 segundo
-            setTimeout(showCompletionScreen, 1000);
+// Enviar dados para a planilha
+function sendResults(name, turma, score) {
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            nome: name,
+            turma: turma,
+            nota: score
+        })
+    }).then(() => {
+        questionScreen.style.display = "none";
+        registrationScreen.style.display = "none";
+        completionScreen.style.display = "block";
+    });
+}
+
+            // Mostrar tela de conclusão
+            setTimeout(showCompletionScreen, 500);
         }
 
         // Event Listeners
-        nextBtn.addEventListener('click', nextStep);
+        nextBtn.addEventListener('click', nextQuestion);
         
-        restartBtn.addEventListener('click', restartActivity);
+        restartBtn.addEventListener('click', initActivity);
         
-        finalRestartBtn.addEventListener('click', restartActivity);
+        finalRestartBtn.addEventListener('click', initActivity);
         
         registrationForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -678,7 +616,7 @@
             const studentClass = document.getElementById('studentClass').value;
             
             // Enviar dados para o Google Sheets
-            https://script.google.com/macros/s/AKfycbw09iSpZFbNbqo5U0DRFuZaB5pnTRuO2fd1EFyiXW_rfChm0AfYFlNXwIUZExeKs2IB/exec (studentName, studentClass);
+            sendToGoogleSheets(studentName, studentClass);
         });
 
         // Inicializar a atividade quando a página carregar
