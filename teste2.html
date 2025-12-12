@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Química Duolingo - Funções Inorgânicas</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        header {
+            background-color: #4a00e0;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .progress-container {
+            height: 8px;
+            background-color: #e0e0e0;
+            width: 100%;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #00c853;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .lesson-content {
+            padding: 30px;
+        }
+        
+        .lesson-title {
+            color: #4a00e0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .explanation {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+        
+        .question-container {
+            margin: 25px 0;
+        }
+        
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            padding: 16px;
+            background-color: #f0f0f0;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .option:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        
+        .option.correct {
+            background-color: #c8e6c9;
+            border-color: #00c853;
+            color: #2e7d32;
+        }
+        
+        .option.incorrect {
+            background-color: #ffcdd2;
+            border-color: #f44336;
+            color: #c62828;
+        }
+        
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .feedback.correct {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            opacity: 1;
+        }
+        
+        .feedback.incorrect {
+            background-color: #ffebee;
+            color: #c62828;
+            opacity: 1;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-next {
+            background-color: #4a00e0;
+            color: white;
+        }
+        
+        .btn-next:hover {
+            background-color: #3800b0;
+            transform: translateY(-2px);
+        }
+        
+        .btn-next:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-restart {
+            background-color: #00c853;
+            color: white;
+        }
+        
+        .btn-restart:hover {
+            background-color: #00a844;
+            transform: translateY(-2px);
+        }
+        
+        .registration-form {
+            padding: 30px;
+            display: none;
+        }
+        
+        .form-title {
+            color: #4a00e0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+        
+        input:focus {
+            border-color: #4a00e0;
+            outline: none;
+        }
+        
+        .btn-submit {
+            background-color: #4a00e0;
+            color: white;
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+        }
+        
+        .btn-submit:hover {
+            background-color: #3800b0;
+        }
+        
+        .lesson-counter {
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .completion-message {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+        
+        .completion-icon {
+            font-size: 4rem;
+            color: #00c853;
+            margin-bottom: 20px;
+        }
+        
+        .completion-title {
+            color: #4a00e0;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 15px;
+            }
+            
+            header {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .lesson-content {
+                padding: 20px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Química Duolingo</h1>
+            <div class="subtitle">Aprenda Funções Inorgânicas de forma leve e divertida!</div>
+        </header>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="lesson-counter" id="lessonCounter">Lição 1 de 5</div>
+        
+        <!-- Tela da lição -->
+        <div id="lessonScreen" class="lesson-content">
+            <h2 class="lesson-title" id="lessonTitle">Ácidos - Os Azedinhos da Química</h2>
+            
+            <div class="explanation" id="explanation">
+                Os ácidos são substâncias que, em solução aquosa, liberam íons H⁺. Eles são os "azedinhos" da química! Presentes no limão (ácido cítrico), no vinagre (ácido acético) e até no nosso suco gástrico (ácido clorídrico). Cuidado: alguns são mansinhos, outros são verdadeiros "dragões" corrosivos!
+            </div>
+            
+            <div class="question-container">
+                <div class="question-text" id="questionText">Qual das alternativas abaixo é um exemplo de ácido?</div>
+                
+                <div class="options" id="optionsContainer">
+                    <!-- As opções serão geradas dinamicamente pelo JavaScript -->
+                </div>
+            </div>
+            
+            <div class="feedback" id="feedback"></div>
+            
+            <div class="navigation">
+                <button class="btn-restart" id="restartBtn">Reiniciar Lição</button>
+                <button class="btn-next" id="nextBtn" disabled>Próxima →</button>
+            </div>
+        </div>
+        
+        <!-- Tela de registro -->
+        <div id="registrationScreen" class="registration-form">
+            <h2 class="form-title">Parabéns! Você completou todas as lições!</h2>
+            <div class="explanation">
+                Agora, por favor, informe seus dados para que seu professor possa acompanhar seu progresso. Sua pontuação será enviada automaticamente.
+            </div>
+            
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="studentName">Nome completo:</label>
+                    <input type="text" id="studentName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="studentClass">Turma:</label>
+                    <input type="text" id="studentClass" required>
+                </div>
+                
+                <button type="submit" class="btn-submit">Enviar resultados</button>
+            </form>
+        </div>
+        
+        <!-- Tela de conclusão -->
+        <div id="completionScreen" class="completion-message">
+            <div class="completion-icon">🎉</div>
+            <h2 class="completion-title">Dados enviados com sucesso!</h2>
+            <div class="explanation">
+                Obrigado por participar da atividade! Seu progresso foi registrado e enviado para o professor. Continue estudando as funções inorgânicas!
+            </div>
+            <button class="btn-restart" id="finalRestartBtn" style="margin-top: 30px;">Refazer atividade</button>
+        </div>
+    </div>
+
+    <script>
+        // Configuração da atividade
+        const lessons = [
+            {
+                title: "Ácidos - Os Azedinhos da Química",
+                explanation: "Os ácidos são substâncias que, em solução aquosa, liberam íons H⁺. Eles são os 'azedinhos' da química! Presentes no limão (ácido cítrico), no vinagre (ácido acético) e até no nosso sugo gástrico (ácido clorídrico). Cuidado: alguns são mansinhos, outros são verdadeiros 'dragões' corrosivos!",
+                questions: [
+                    {
+                        question: "Qual das alternativas abaixo é um exemplo de ácido?",
+                        options: ["NaOH", "HCl", "NaCl", "CO₂"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "Qual é a principal característica dos ácidos em solução aquosa?",
+                        options: ["Liberam íons OH⁻", "Liberam íons H⁺", "Não conduzem eletricidade", "Têm sabor adocicado"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "Qual desses ácidos é encontrado no limão?",
+                        options: ["Ácido sulfúrico", "Ácido acético", "Ácido cítrico", "Ácido clorídrico"],
+                        correctAnswer: 2
+                    }
+                ]
+            },
+            {
+                title: "Bases - Os Amargos que Neutralizam",
+                explanation: "As bases (ou hidróxidos) são substâncias que em solução aquosa liberam íons OH⁻. São os 'amargos' da química, com sensação escorregadia ao toque. Presentes no sabão, no leite de magnésia e na soda cáustica. Sua missão? Neutralizar os ácidos! É a famosa reação de neutralização.",
+                questions: [
+                    {
+                        question: "Qual das alternativas abaixo é um exemplo de base?",
+                        options: ["H₂SO₄", "NaOH", "NaCl", "H₂O"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "Qual é a principal característica das bases em solução aquosa?",
+                        options: ["Liberam íons H⁺", "Liberam íons OH⁻", "Têm sabor azedo", "São sempre líquidas"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "O que acontece quando misturamos uma base com um ácido?",
+                        options: ["Forma-se um sal e água", "Forma-se um gás tóxico", "Não acontece nada", "A solução fica ácida"],
+                        correctAnswer: 0
+                    }
+                ]
+            },
+            {
+                title: "Sais - Os Resultados da Neutralização",
+                explanation: "Os sais são compostos iônicos resultantes da reação entre um ácido e uma base. Eles são os 'filhotes' da química! O sal de cozinha (NaCl) é o mais famoso, mas existem milhares: carbonato de cálcio (mármore), nitrato de potássio (fertilizante) e muitos outros. Alguns são saborosos, outros... nem tanto!",
+                questions: [
+                    {
+                        question: "Qual das alternativas abaixo é um exemplo de sal?",
+                        options: ["HCl", "NaOH", "NaCl", "CO₂"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "Como os sais são formados?",
+                        options: ["Pela reação de um ácido com uma base", "Pela reação de dois metais", "Pela decomposição da água", "Pela combustão do oxigênio"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "Qual é o sal mais consumido no mundo?",
+                        options: ["Carbonato de cálcio", "Nitrato de potássio", "Cloreto de sódio", "Sulfato de cobre"],
+                        correctAnswer: 2
+                    }
+                ]
+            },
+            {
+                title: "Óxidos - Os Compostos com Oxigênio",
+                explanation: "Óxidos são compostos binários formados por oxigênio e outro elemento. Eles são os 'onipresentes' da química! A ferrugem (óxido de ferro), o gás carbônico (óxido de carbono) e a cal (óxido de cálcio) são exemplos. Alguns são essenciais para a vida, outros... melhor manter distância!",
+                questions: [
+                    {
+                        question: "Qual das alternativas abaixo é um exemplo de óxido?",
+                        options: ["NaOH", "HCl", "CO₂", "NaCl"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "Óxidos são compostos formados por oxigênio e:",
+                        options: ["Apenas metais", "Apenas não-metais", "Qualquer outro elemento", "Apenas hidrogênio"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "Qual óxido é responsável pela ferrugem?",
+                        options: ["Óxido de cálcio", "Óxido de alumínio", "Óxido de ferro", "Óxido de sódio"],
+                        correctAnswer: 2
+                    }
+                ]
+            },
+            {
+                title: "Revisão Final - Misturando Tudo!",
+                explanation: "Hora de testar seus conhecimentos sobre todas as funções inorgânicas! Ácidos, bases, sais e óxidos - cada um com suas características e funções. Lembre-se: ácidos liberam H⁺, bases liberam OH⁻, sais são resultados da neutralização, e óxidos têm oxigênio + outro elemento. Boa sorte!",
+                questions: [
+                    {
+                        question: "Qual função inorgânica libera íons H⁺ em solução aquosa?",
+                        options: ["Ácidos", "Bases", "Sais", "Óxidos"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "NaOH é um exemplo de:",
+                        options: ["Ácido", "Base", "Sal", "Óxido"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "O resultado da reação entre um ácido e uma base é:",
+                        options: ["Um óxido", "Um sal e água", "Apenas água", "Um gás"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "CO₂ é um exemplo de:",
+                        options: ["Ácido", "Base", "Sal", "Óxido"],
+                        correctAnswer: 3
+                    }
+                ]
+            }
+        ];
+
+        // Variáveis de estado
+        let currentLesson = 0;
+        let currentQuestion = 0;
+        let score = 0;
+        let totalQuestions = 0;
+        let answeredQuestions = 0;
+        let selectedOption = null;
+        let canAnswer = true;
+
+        // Elementos DOM
+        const lessonScreen = document.getElementById('lessonScreen');
+        const registrationScreen = document.getElementById('registrationScreen');
+        const completionScreen = document.getElementById('completionScreen');
+        const lessonTitle = document.getElementById('lessonTitle');
+        const explanation = document.getElementById('explanation');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedback = document.getElementById('feedback');
+        const nextBtn = document.getElementById('nextBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const progressBar = document.getElementById('progressBar');
+        const lessonCounter = document.getElementById('lessonCounter');
+        const registrationForm = document.getElementById('registrationForm');
+        const finalRestartBtn = document.getElementById('finalRestartBtn');
+
+        // Inicializar a atividade
+        function initActivity() {
+            // Calcular total de questões
+            totalQuestions = lessons.reduce((total, lesson) => total + lesson.questions.length, 0);
+            
+            // Iniciar a primeira lição
+            loadLesson(currentLesson);
+        }
+
+        // Carregar uma lição
+        function loadLesson(lessonIndex) {
+            const lesson = lessons[lessonIndex];
+            lessonTitle.textContent = lesson.title;
+            explanation.textContent = lesson.explanation;
+            currentQuestion = 0;
+            
+            // Atualizar contador
+            lessonCounter.textContent = `Lição ${lessonIndex + 1} de ${lessons.length}`;
+            
+            // Atualizar barra de progresso
+            const progress = (lessonIndex / lessons.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            // Carregar a primeira questão da lição
+            loadQuestion(lessonIndex, currentQuestion);
+        }
+
+        // Carregar uma questão
+        function loadQuestion(lessonIndex, questionIndex) {
+            const question = lessons[lessonIndex].questions[questionIndex];
+            questionText.textContent = question.question;
+            
+            // Limpar opções anteriores
+            optionsContainer.innerHTML = '';
+            
+            // Adicionar novas opções
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.dataset.index = index;
+                
+                optionElement.addEventListener('click', () => selectOption(optionElement, index, question.correctAnswer));
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Resetar estado
+            feedback.textContent = '';
+            feedback.className = 'feedback';
+            nextBtn.disabled = true;
+            selectedOption = null;
+            canAnswer = true;
+        }
+
+        // Selecionar uma opção
+        function selectOption(optionElement, selectedIndex, correctIndex) {
+            if (!canAnswer) return;
+            
+            canAnswer = false;
+            selectedOption = selectedIndex;
+            
+            // Marcar todas as opções como selecionadas
+            const allOptions = document.querySelectorAll('.option');
+            allOptions.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+            });
+            
+            // Verificar resposta
+            if (selectedIndex === correctIndex) {
+                optionElement.classList.add('correct');
+                feedback.textContent = "✅ Acertou! Muito bem!";
+                feedback.className = 'feedback correct';
+                score++; // Incrementar pontuação
+            } else {
+                optionElement.classList.add('incorrect');
+                feedback.textContent = "❌ Tente novamente!";
+                feedback.className = 'feedback incorrect';
+                
+                // Mostrar a resposta correta
+                allOptions[correctIndex].classList.add('correct');
+            }
+            
+            answeredQuestions++;
+            nextBtn.disabled = false;
+        }
+
+        // Avançar para a próxima questão ou lição
+        function nextStep() {
+            const currentLessonObj = lessons[currentLesson];
+            
+            if (currentQuestion < currentLessonObj.questions.length - 1) {
+                // Próxima questão na mesma lição
+                currentQuestion++;
+                loadQuestion(currentLesson, currentQuestion);
+            } else if (currentLesson < lessons.length - 1) {
+                // Próxima lição
+                currentLesson++;
+                loadLesson(currentLesson);
+            } else {
+                // Última lição concluída - mostrar tela de registro
+                showRegistrationScreen();
+            }
+        }
+
+        // Mostrar tela de registro
+        function showRegistrationScreen() {
+            lessonScreen.style.display = 'none';
+            registrationScreen.style.display = 'block';
+            
+            // Atualizar barra de progresso para 100%
+            progressBar.style.width = '100%';
+        }
+
+        // Mostrar tela de conclusão
+        function showCompletionScreen() {
+            registrationScreen.style.display = 'none';
+            completionScreen.style.display = 'block';
+        }
+
+        // Reiniciar atividade
+        function restartActivity() {
+            currentLesson = 0;
+            currentQuestion = 0;
+            score = 0;
+            answeredQuestions = 0;
+            
+            lessonScreen.style.display = 'block';
+            registrationScreen.style.display = 'none';
+            completionScreen.style.display = 'none';
+            
+            initActivity();
+        }
+
+        // Enviar dados para o Google Sheets (simulação)
+        function sendToGoogleSheets(studentName, studentClass) {
+            // Em um ambiente real, aqui seria feita uma requisição para o Google Apps Script
+            // que enviaria os dados para a planilha do Google Sheets
+            
+            // Simulação do envio
+            console.log(`Dados enviados para o Google Sheets:
+            Nome: ${studentName}
+            Turma: ${studentClass}
+            Pontuação: ${score}/${totalQuestions}
+            Percentual: ${((score / totalQuestions) * 100).toFixed(1)}%`);
+            
+            // Em uma implementação real, você usaria:
+            // fetch('URL_DO_SEU_GOOGLE_APPS_SCRIPT', {
+            //     method: 'POST',
+            //     body: JSON.stringify({
+            //         name: studentName,
+            //         class: studentClass,
+            //         score: score,
+            //         total: totalQuestions,
+            //         timestamp: new Date().toISOString()
+            //     })
+            // });
+            
+            // Para testar, mostramos um alerta
+            alert(`Dados enviados com sucesso!\n\nNome: ${studentName}\nTurma: ${studentClass}\n\nSua pontuação (${score}/${totalQuestions}) foi registrada e enviada ao professor.`);
+            
+            // Mostrar tela de conclusão após 1 segundo
+            setTimeout(showCompletionScreen, 1000);
+        }
+
+        // Event Listeners
+        nextBtn.addEventListener('click', nextStep);
+        
+        restartBtn.addEventListener('click', restartActivity);
+        
+        finalRestartBtn.addEventListener('click', restartActivity);
+        
+        registrationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const studentName = document.getElementById('studentName').value;
+            const studentClass = document.getElementById('studentClass').value;
+            
+            // Enviar dados para o Google Sheets
+            sendToGoogleSheets(studentName, studentClass);
+        });
+
+        // Inicializar a atividade quando a página carregar
+        document.addEventListener('DOMContentLoaded', initActivity);
+    </script>
+</body>
+</html>
