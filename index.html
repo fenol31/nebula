@@ -1,58 +1,113 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nébula</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Química Duolingo - Funções Inorgânicas</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <header>
-    <div class="star-field"></div>
-    <h1>Nébula</h1>
-    <p>Seu cantinho cósmico e pessoal</p>
-  </header>
-  <nav>
-    <button onclick="showSection('diario')">Diário Cósmico</button>
-    <button onclick="showSection('cartas')">Cartas para o Universo</button>
-    <button onclick="showSection('galeria')">Galeria de Criações</button>
-    <button onclick="showSection('santuario')">Santuário</button>
-    <button onclick="showSection('projetos')">Laboratório de Projetos</button>
-      <button onclick="showSection('acidos')">Ácidos</button> 
-  </nav>
-  <main>
-    <section id="diario" class="active">
-      <h2>Diário Cósmico</h2>
-      <p>Escreva aqui suas reflexões, trechos dos dias, e constelações internas...</p>
-    </section>
-    <section id="cartas">
-      <h2>Cartas para o Universo</h2>
-      <p>Um espaço para escrever cartas simbólicas e deixar o universo responder com silêncio e estrelas.</p>
-    </section>
-    <section id="galeria">
-      <h2>Galeria de Criações</h2>
-      <p>Exponha aqui seus textos, fotos, poemas, pensamentos ou desenhos.</p>
-    </section>
-    <section id="santuario">
-      <h2>Santuário</h2>
-      <p>Seu ninho virtual: orações, playlists, trechos de livros e luzinhas internas.</p>
-    </section>
-    <section id="projetos">
-      <h2>Laboratório de Projetos</h2>
-      <p>Onde você sonha alto, anota ideias e registra tudo que está criando.</p>
-    </section>
-      <section id="acidos" class="active">
-      <h2>Ácidos</h2>
-      <p>Questionário</p>
-    </section>
-  </main>
-  <script>
-    function showSection(id) {
-      const sections = document.querySelectorAll('section');
-      sections.forEach(sec => sec.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-    }
-  </script>
-  <script src="script.js"></script>
+    <div class="container">
+        <!-- Tela 1: Identificação -->
+        <div id="tela-identificacao" class="tela ativa">
+            <div class="logo">
+                <i class="fas fa-flask"></i>
+                <h1>Química Duolingo</h1>
+            </div>
+            <p class="subtitulo">Aprenda Funções Inorgânicas de forma divertida!</p>
+            
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="nome"><i class="fas fa-user"></i> Nome Completo</label>
+                    <input type="text" id="nome" placeholder="Digite seu nome completo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="turma"><i class="fas fa-users"></i> Turma</label>
+                    <input type="text" id="turma" placeholder="Ex: 1ºA, 2ºB, etc." required>
+                </div>
+                
+                <button id="btn-iniciar" class="btn">
+                    <i class="fas fa-play"></i> Começar Aventura Química
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela 2: Introdução da Lição -->
+        <div id="tela-introducao" class="tela">
+            <div class="topo">
+                <span id="indicador-licao">Lições: 1/4</span>
+                <div class="progresso-container">
+                    <div class="progresso-bar" id="progresso-bar"></div>
+                </div>
+            </div>
+            
+            <div class="conteudo-licao">
+                <div id="icone-topico" class="icone-topico">
+                    <i class="fas fa-lemon"></i>
+                </div>
+                <h2 id="titulo-topico">Ácidos</h2>
+                <div id="texto-explicativo" class="texto-explicativo">
+                    Carregando conteúdo...
+                </div>
+                
+                <button id="btn-comecar-questoes" class="btn">
+                    <i class="fas fa-question-circle"></i> Vamos às Questões!
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela 3: Questões -->
+        <div id="tela-questao" class="tela">
+            <div class="topo">
+                <span id="contador-questao">Questão 1/5</span>
+                <div class="progresso-container">
+                    <div class="progresso-bar" id="progresso-questao"></div>
+                </div>
+            </div>
+            
+            <div class="questao-container">
+                <h3 id="texto-questao">Carregando questão...</h3>
+                
+                <div id="opcoes-container" class="opcoes-container">
+                    <!-- Opções serão inseridas via JavaScript -->
+                </div>
+                
+                <div class="controles">
+                    <button id="btn-proxima" class="btn btn-proxima" disabled>
+                        <i class="fas fa-arrow-right"></i> Próxima
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela 4: Conclusão -->
+        <div id="tela-conclusao" class="tela">
+            <div class="conclusao-container">
+                <div class="conclusao-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h2>Missão Cumprida!</h2>
+                <p class="mensagem-conclusao">
+                    Parabéns! Você completou todas as lições sobre Funções Inorgânicas.
+                </p>
+                <p class="mensagem-dica">
+                    Continue explorando o mundo fascinante da Química!
+                </p>
+                
+                <div class="info-envio">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Seu progresso foi registrado com sucesso!</span>
+                </div>
+                
+                <button id="btn-novamente" class="btn btn-secundario">
+                    <i class="fas fa-redo"></i> Fazer Novamente
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
